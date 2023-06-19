@@ -1,0 +1,40 @@
+name: CI_quote_disp
+
+on:
+  push:
+    paths:
+      - qoute_disp/**
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: quote_disp
+    steps:
+      - name: Check out repo code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest pytest-cov
+          python -m pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
+#       - name: Pytest coverage comment
+#         uses: MishaKav/pytest-coverage-comment@main
+#         with:
+#           pytest-coverage-path: ./pytest-coverage.txt
+#           junitxml-path: ./pytest.xml
