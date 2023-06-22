@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  web1:
+    build: ./quote_gen
+    ports:
+      - "5000-5002:5000"
+    deploy:
+      replicas: 3
+  web2:
+    build: ./quote_disp
+    ports:
+      - "5003-5005:5001"
+    deploy:
+      replicas: 3
+    depends_on:
+      - web1
