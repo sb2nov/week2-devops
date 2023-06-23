@@ -15,6 +15,3 @@ services:
       - "5001:5000"
     depends_on:
       - web1
-    deploy:
-      mode: replicated
-      replicas: 2
