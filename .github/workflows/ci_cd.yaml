@@ -1,0 +1,44 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Check out repo code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install flake8 pytest pytest-cov
+      - name: Run quote_disp tests
+        run: |
+          cd quote_disp
+          python -m pytest -v tests
+      - name: Run quote_gen tests
+        run: |
+          cd quote_gen
+          python -m pytest -v tests
+      - name: Check coverage
+        run: |
+          pytest --cov=calculator --cov-report "xml:coverage.xml"  tests/
+      - name: Write coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-xml-coverage-path: ./coverage.xml
