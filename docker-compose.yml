@@ -1,0 +1,56 @@
+version: "4"
+
+networks:
+  quote-network:
+    driver: bridge
+    name: quote-network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  gen:
+    build: # https://docs.docker.com/compose/compose-file/build/
+      context: ./quote_gen
+      dockerfile: Dockerfile
+    image: quote-gen-image
+    restart: unless-stopped
+    hostname: gen
+    expose:
+      - 5000
+    deploy: # https://docs.docker.com/compose/compose-file/deploy/
+      replicas: 2
+      endpoint_mode: vip
+    networks:
+      - quote-network
+
+  disp:
+    build:
+      context: ./quote_disp
+      dockerfile: Dockerfile
+    image: quote-disp-image
+    restart: unless-stopped
+    hostname: disp
+    expose:
+      - 5001
+    depends_on:
+      - gen
+    deploy:
+      replicas: 2
+      endpoint_mode: vip
+    networks:
+      - quote-network
+
+  nginx: # Check logs: docker-compose up | docker-compose up -d -> docker-compose logs nginx
+    image: nginx
+    restart: unless-stopped
+    hostname: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - gen
+      - disp
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - quote-network

@@ -1,5 +1,10 @@
 # Intro to DevOps - Week 2 Project Starter Code
 
+# Added OPTIONAL
+
+
+
+
 # Goal
 ## Containerize two Flask web services and use Docker Compose to orchestrate them
 ### For our week 2 project, we will be containerizing two Flask apps, one generates a Random Quote, and the other service consumes this and displays it on a neat front end.
@@ -256,5 +261,3 @@ disp  |  * Restarting with stat
 disp  |  * Debugger is active!
 disp  |  * Debugger PIN: 112-266-209
 ```
-
-## You can find a link to the Docker Compose tutorial https://docs.docker.com/compose/gettingstarted/
