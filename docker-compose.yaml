@@ -3,15 +3,15 @@ services:
   web1:
     build: ./quote_gen
     deploy:
-      replicas: 2
+      replicas: 1
     ports:
-      - "5001-5002:5000"
+      - "5000:5000"
   web2:
     build: ./quote_disp
     deploy:
-      replicas: 2
+      replicas: 1
     ports:
-      - "6001-6002:5001"
+      - "5001:5001"
     restart: always
     depends_on:
       - web1

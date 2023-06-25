@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route("/health")
 def health():
-    return "healthy byte"
+    return "healthy time"
 
 
 @app.route("/")
@@ -24,7 +24,7 @@ def quote():
     ]
     quote = "Quote Service is unavailable"
     for host in hosts:
-        r = requests.get[host]
+        r = requests.get(host)
         if r.status_code ==200:
             quote = r.text
             break
