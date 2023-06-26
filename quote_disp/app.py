@@ -19,7 +19,7 @@ def home():
 @app.route("/get_quote")
 def quote():
     hosts = [
-        "http://week2-devops-jwooden_web1_1:5000/quote",
+        "http://week2-devops-jwooden_web1_1:5000/quote111",
         "http://week2-devops-jwooden_web1_2:5000/quote"
     ]
     quote = "Quote service is unavailable"
