@@ -1,0 +1,44 @@
+name: Test API Service
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: 
+      - "*"
+
+jobs:
+  test_api_service:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and run Docker Compose
+      run: |
+        docker-compose build
+        docker-compose up -d
+
+    - name: Wait for API to start
+      run: sleep 10
+
+    - name: Test Quote Disp Health
+      run: |
+        status=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:5001/health)
+        if [[ "$status" -ne 200 ]]; then
+          echo "API endpoint returned $status"
+          exit 1
+        fi
+
+    - name: Test Quote Gen Health
+      run: |
+        status=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:5000/health)
+        if [[ "$status" -ne 200 ]]; then
+          echo "API endpoint returned $status"
+          exit 1
+        fi
+
+    - name: Stop Docker Compose
+      run: docker-compose down

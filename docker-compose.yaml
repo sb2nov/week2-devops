@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  web1:
+    build: ./quote_gen
+    deploy:
+      replicas: 1
+    ports:
+      - "5000:5000"
+    restart: always
+    volumes:
+      - ./quote_gen:/app:rw
+
+  web2:
+    build: ./quote_disp
+    deploy:
+      replicas: 1
+    ports:
+      - "5001:5001"
+    restart: always
+    volumes:
+      - ./quote_disp:/app:rw
+    depends_on:
+      - web1
